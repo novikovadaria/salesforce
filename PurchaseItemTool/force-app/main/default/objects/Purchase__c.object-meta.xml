@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Purchase</label>
+    <pluralLabel>Purchases</pluralLabel>
+    <nameField>
+        <type>Text</type>
+        <label>Purchase Name</label>
+    </nameField>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <sharingModel>ReadWrite</sharingModel>
+
+    <fields>
+        <fullName>ClientId__c</fullName>
+        <label>Client</label>
+        <type>Lookup</type>
+        <referenceTo>Account</referenceTo>
+        <relationshipName>Client</relationshipName>
+    </fields>
+
+    <fields>
+        <fullName>TotalItems__c</fullName>
+        <label>Total Items</label>
+        <type>Number</type>
+        <precision>18</precision>
+        <scale>0</scale>
+    </fields>
+
+    <fields>
+        <fullName>GrandTotal__c</fullName>
+        <label>Grand Total</label>
+        <type>Number</type>
+        <precision>18</precision>
+        <scale>2</scale>
+    </fields>
+</CustomObject>

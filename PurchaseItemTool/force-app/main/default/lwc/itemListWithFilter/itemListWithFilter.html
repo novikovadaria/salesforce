@@ -1,0 +1,64 @@
+<template>
+    <lightning-card title="Item List with Filter">
+        <lightning-layout horizontal-align="spread">
+            <!-- Фильтрация по Family -->
+            <lightning-layout-item>
+                <lightning-combobox 
+                    name="family"
+                    label="Family"
+                    value={selectedFamily}
+                    options={familyOptions}
+                    onchange={handleFilterChange}>
+                </lightning-combobox>
+            </lightning-layout-item>
+
+            <!-- Фильтрация по Type -->
+            <lightning-layout-item>
+                <lightning-combobox 
+                    name="type"
+                    label="Type"
+                    value={selectedType}
+                    options={typeOptions}
+                    onchange={handleFilterChange}>
+                </lightning-combobox>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <!-- Список товаров -->
+        <div class="slds-grid slds-wrap">
+            <template for:each={filteredItems} for:item="item">
+                <div key={item.Id} class="slds-col slds-size_1-of-2 slds-p-around_small">
+                    <!-- Карточка товара -->
+                    <lightning-card title={item.Name} icon-name="standard:product">
+                        <p>{item.Description}</p>
+                        <p><strong>Price:</strong> ${item.Price}</p>
+                        <lightning-button
+                            label="Details"
+                            data-id={item.Id}
+                            onclick={handleOpenItemDetails}
+                            variant="neutral">
+                        </lightning-button>
+                        <lightning-button
+                            label="Add to Cart"
+                            data-id={item.Id}
+                            onclick={handleAddToCart}
+                            variant="brand">
+                        </lightning-button>
+                    </lightning-card>
+                </div>
+            </template>
+        </div>
+
+        <!-- Модальное окно с деталями товара -->
+        <template if:true={isModalOpen}>
+            <lightning-modal>
+                <h2>{selectedItem.Name}</h2>
+                <p>{selectedItem.Description}</p>
+                <p><strong>Price:</strong> ${selectedItem.Price}</p>
+                <p><strong>Family:</strong> {selectedItem.Family__c}</p>
+                <p><strong>Type:</strong> {selectedItem.Type__c}</p>
+                <lightning-button label="Close" onclick={handleCloseModal}></lightning-button>
+            </lightning-modal>
+        </template>
+    </lightning-card>
+</template>

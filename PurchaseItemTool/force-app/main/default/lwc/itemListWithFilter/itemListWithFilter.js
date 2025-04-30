@@ -1,4 +1,7 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, wire } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { publish, MessageContext } from 'lightning/messageService';
+import CART_MESSAGE from '@salesforce/messageChannel/CartMessageChannel__c';
 
 export default class ItemListWithFilter extends LightningElement {
     @track items = [
@@ -13,68 +16,56 @@ export default class ItemListWithFilter extends LightningElement {
         { Id: '9', Name: 'Item 9', Description: 'Description for Item 9', Price: 500, Family__c: 'FamilyC', Type__c: 'Type3', ImageUrl: 'https://via.placeholder.com/150' },
         { Id: '10', Name: 'Item 10', Description: 'Description for Item 10', Price: 550, Family__c: 'FamilyA', Type__c: 'Type1', ImageUrl: 'https://via.placeholder.com/150' }
     ];
-    
-    @track filteredItems = this.items; // Фильтрованные товары
-    @track selectedFamily = ''; // Выбранное семейство для фильтрации
-    @track selectedType = ''; // Выбранный тип для фильтрации
-    @track isModalOpen = false; // Состояние модального окна
-    @track selectedItem = {}; // Выбранный товар для отображения в модальном окне
 
-    // Фильтрационные опции для типов и семейств товаров
-    typeOptions = [
-        { label: 'Type 1', value: 'Type1' },
-        { label: 'Type 2', value: 'Type2' },
-        { label: 'Type 3', value: 'Type3' }
-    ];
+    @track filteredItems = this.items;
+    @track isCartModalOpen = false;
+    @track isModalOpen = false;
+    @track selectedItem = {};
 
-    familyOptions = [
-        { label: 'Family A', value: 'FamilyA' },
-        { label: 'Family B', value: 'FamilyB' },
-        { label: 'Family C', value: 'FamilyC' }
-    ];
+    @wire(MessageContext)
+    messageContext;
 
-    // Обработчик изменения фильтра
-    handleFilterChange(event) {
-        const filterType = event.target.name;
-        const filterValue = event.target.value;
-
-        if (filterType === 'family') {
-            this.selectedFamily = filterValue;
-        } else if (filterType === 'type') {
-            this.selectedType = filterValue;
+    columns = [
+        { label: 'Name', fieldName: 'Name' },
+        { label: 'Price', fieldName: 'Price', type: 'currency' },
+        { label: 'Description', fieldName: 'Description' },
+        {
+            label: 'Remove',
+            type: 'button',
+            typeAttributes: {
+                label: 'Remove',
+                name: 'remove',
+                variant: 'destructive'
+            }
         }
+    ];
 
-        this.applyFilters();
+    handleAddToCart(event) {
+        const itemId = event.target.dataset.id;
+        const item = this.filteredItems.find(item => item.Id === itemId);
+    
+        if (item) {
+            publish(this.messageContext, CART_MESSAGE, { item: item });
+        }
     }
 
-    // Применяем фильтры
-    applyFilters() {
-        this.filteredItems = this.items.filter(item => {
-            const matchFamily = this.selectedFamily ? item.Family__c === this.selectedFamily : true;
-            const matchType = this.selectedType ? item.Type__c === this.selectedType : true;
-            return matchFamily && matchType;
-        });
-    }
-
-    // Открытие модального окна с деталями товара
     handleOpenItemDetails(event) {
         const itemId = event.target.dataset.id;
         this.selectedItem = this.items.find(item => item.Id === itemId);
         this.isModalOpen = true;
     }
 
-    // Закрытие модального окна
     handleCloseModal() {
         this.isModalOpen = false;
     }
 
-    // Добавление товара в корзину
-    handleAddToCart(event) {
-        const itemId = event.target.dataset.id;
-        const item = this.items.find(item => item.Id === itemId);
-        const cartEvent = new CustomEvent('addtocart', {
-            detail: item
+    // Функция для отображения уведомления (тост)
+    showToast(title, message, variant) {
+        const event = new ShowToastEvent({
+            title,
+            message,
+            variant
         });
-        this.dispatchEvent(cartEvent);
+        this.dispatchEvent(event);
     }
 }

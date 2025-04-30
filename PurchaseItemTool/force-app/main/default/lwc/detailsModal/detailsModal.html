@@ -1,0 +1,11 @@
+<template>
+    <lightning-modal header="Item Details" size="medium" onclose={handleClose}>
+        <div class="slds-p-around_medium">
+            <p><strong>Name:</strong> {item.Name}</p>
+            <p><strong>Description:</strong> {item.Description}</p>
+            <p><strong>Type:</strong> {item.Type__c}</p>
+            <p><strong>Family:</strong> {item.Family__c}</p>
+            <p><strong>Price:</strong> {item.Price__c}</p>
+        </div>
+    </lightning-modal>
+</template>

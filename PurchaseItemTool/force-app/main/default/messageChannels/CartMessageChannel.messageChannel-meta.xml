@@ -1,0 +1,8 @@
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>Cart Message Channel</masterLabel>
+    <isExposed>true</isExposed>
+    <description>Channel for cart items</description>
+    <lightningMessageFields>
+        <fieldName>item</fieldName>
+    </lightningMessageFields>
+</LightningMessageChannel>

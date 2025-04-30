@@ -20,4 +20,9 @@ export default class CartModal extends LightningElement {
             }));
         }
     }
+
+    handleCheckout() {
+        this.dispatchEvent(new CustomEvent('checkout'));
+    }
+    
 }

@@ -1,5 +1,6 @@
 import { LightningElement, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import createPurchaseWithLines from '@salesforce/apex/PurchaseController.createPurchaseWithLines';
 
 export default class itemListWithFilter extends LightningElement {
     @track isManager = true;
@@ -151,4 +152,30 @@ export default class itemListWithFilter extends LightningElement {
     showToast(title, message, variant) {
         this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
     }
+
+    // Обработчик для завершения покупки (checkout)
+    handleCheckout() {
+        const items = this.cartItems.map(item => ({
+            Item__c: item.Id,
+            Quantity__c: item.Quantity,
+            Price__c: item.Price,
+            TotalPrice__c: item.TotalPrice
+        }));
+
+        createPurchaseWithLines({ itemsJson: JSON.stringify(items) })
+            .then(result => {
+                this.cartItems = [];
+                this.isCartOpen = false;
+                this.showToast('Success', 'Purchase created successfully!', 'success');
+            })
+            .catch(error => {
+                this.showToast('Error', error.body.message, 'error');
+            });
+    }
+
+    // Метод для отображения сообщений toast
+    showToast(title, message, variant) {
+        this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
+    }
+    
 }

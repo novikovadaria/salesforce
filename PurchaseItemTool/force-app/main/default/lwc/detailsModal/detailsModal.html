@@ -1,11 +1,23 @@
 <template>
-    <lightning-modal header="Item Details" size="medium" onclose={handleClose}>
-        <div class="slds-p-around_medium">
-            <p><strong>Name:</strong> {item.Name}</p>
-            <p><strong>Description:</strong> {item.Description}</p>
-            <p><strong>Type:</strong> {item.Type__c}</p>
-            <p><strong>Family:</strong> {item.Family__c}</p>
-            <p><strong>Price:</strong> {item.Price__c}</p>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <h2 class="slds-modal__title">Item Details</h2>
+            </header>
+
+            <div class="slds-modal__content slds-p-around_medium">
+                <p><strong>Name:</strong> {item.Name}</p>
+                <p><strong>Description:</strong> {item.Description}</p>
+                <p><strong>Type:</strong> {item.Type__c}</p>
+                <p><strong>Family:</strong> {item.Family__c}</p>
+                <p><strong>Price:</strong> {item.Price__c}</p>
+            </div>
+
+            <footer class="slds-modal__footer">
+                <lightning-button label="Close" onclick={handleClose}></lightning-button>
+                <lightning-button variant="destructive" label="Delete" onclick={handleDelete} class="slds-m-left_small"></lightning-button>
+            </footer>
         </div>
-    </lightning-modal>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
 </template>

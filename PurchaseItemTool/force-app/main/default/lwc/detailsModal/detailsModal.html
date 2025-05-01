@@ -15,7 +15,10 @@
 
             <footer class="slds-modal__footer">
                 <lightning-button label="Close" onclick={handleClose}></lightning-button>
-                <lightning-button variant="destructive" label="Delete" onclick={handleDelete} class="slds-m-left_small"></lightning-button>
+
+                <template if:true={isManager}>
+                    <lightning-button variant="destructive" label="Delete" onclick={handleDelete} class="slds-m-left_small"></lightning-button>
+                </template>
             </footer>
         </div>
     </section>

@@ -5,7 +5,7 @@
             <lightning-input type="checkbox" label="Manager Mode" checked={isManagerMode} onchange={handleManagerToggle}></lightning-input>
         </lightning-layout-item>
         
-        <!-- Верхняя панель: кнопки и инфо -->
+        <!-- Buttons + user info -->
         <lightning-layout horizontal-align="spread" vertical-align="center" class="slds-p-around_medium">
             <lightning-layout-item>
                 <template if:true={isManagerMode}>
@@ -32,7 +32,7 @@
             </lightning-layout-item>
         </lightning-layout>
 
-        <!-- Фильтрация -->
+        <!-- Filters -->
         <lightning-layout horizontal-align="spread" class="slds-p-around_medium">
             <lightning-layout-item>
                 <lightning-combobox label="Family" name="family" value={selectedFamily} options={familyOptions} onchange={handleFilterChange}></lightning-combobox>
@@ -45,10 +45,10 @@
             </lightning-layout-item>
         </lightning-layout>
 
-        <!-- Поле поиска -->
+        <!-- Search Input -->
         <lightning-input label="Search by Name or Description" onchange={handleSearchChange} onkeyup={handleSearchKeyUp}></lightning-input>
 
-        <!-- Список товаров -->
+        <!-- List of items -->
         <div class="slds-grid slds-wrap">
             <template for:each={filteredItems} for:item="item">
                 <div key={item.Id} class="slds-col slds-size_1-of-2 slds-p-around_small">
@@ -68,16 +68,18 @@
             </template>
         </div>
 
-        <!-- Модальное окно с деталями -->
+        <!-- Details Window -->
         <template if:true={isItemModalOpen}>
             <c-details-modal
                 item={selectedItem}
+                is-manager={isManagerMode}
                 onclose={handleCloseItemModal}
                 ondelete={handleDeleteItem}>
             </c-details-modal>
         </template>
 
-        <!-- Модальное окно с корзиной -->
+
+        <!-- Cart window -->
         <template if:true={isCartOpen}>
             <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
                 <div class="slds-modal__container">
@@ -105,7 +107,7 @@
             <div class="slds-backdrop slds-backdrop_open"></div>
         </template>
 
-            <!-- Модальное окно для создания Item -->
+            <!-- Create Item window -->
         <template if:true={isCreateModalOpen}>
         <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container">

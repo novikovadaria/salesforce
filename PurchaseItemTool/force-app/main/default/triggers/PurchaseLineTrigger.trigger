@@ -1,6 +1,7 @@
 trigger PurchaseLineTrigger on PurchaseLine__c (after insert, after update, after delete) {
     Set<Id> purchaseIds = new Set<Id>();
 
+    // Insert or update, PurchaseId__c is taken from Trigger.new.
     if (Trigger.isInsert || Trigger.isUpdate) {
         for (PurchaseLine__c line : Trigger.new) {
             purchaseIds.add(line.PurchaseId__c);
@@ -13,6 +14,7 @@ trigger PurchaseLineTrigger on PurchaseLine__c (after insert, after update, afte
         }
     }
 
+    // Load all Purchase__c records that are associated with the changed rows.
     List<Purchase__c> purchases = [SELECT Id, TotalItems__c, GrandTotal__c 
                                    FROM Purchase__c 
                                    WHERE Id IN :purchaseIds];
